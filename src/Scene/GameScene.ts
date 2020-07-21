@@ -17,7 +17,7 @@ class GameScene extends Scene {
 		// SceneManager.Instance.pushScene(tc);
 		// });
 
-		let lvl : Level2 = new Level2();
+		let lvl : Level4 = new Level4();
 		this.addChild(lvl);
 
 	}

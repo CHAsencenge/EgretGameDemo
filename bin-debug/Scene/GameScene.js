@@ -25,7 +25,7 @@ var GameScene = (function (_super) {
         // let tc: LayerDemo = new LayerDemo();
         // SceneManager.Instance.pushScene(tc);
         // });
-        var lvl = new Level2();
+        var lvl = new Level4();
         this.addChild(lvl);
     };
     GameScene.prototype.onExit = function () {
