@@ -1,0 +1,77 @@
+class Level5 extends egret.DisplayObjectContainer implements egret.DisplayObject {
+    public static instance: Level5;
+    public _picA: egret.Bitmap;
+    public _picTen: egret.Bitmap;
+    public _picJ: egret.Bitmap;
+    public _picQ: egret.Bitmap;
+    public _picK: egret.Bitmap;
+    public _ok: egret.Bitmap;
+    public _buttonNext: egret.Bitmap;
+    public _buttonPrev: egret.Bitmap;
+    public _comb: egret.Bitmap;
+    public _distance: egret.Point = new egret.Point();
+    public _touchStatus: boolean = false;
+
+
+    public constructor() {
+        super();
+        Level5.instance = this;
+        // 监听组件创建完毕 也就是场景的外观创建完毕
+        this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onEnter, this);
+        this.addEventListener(egret.Event.REMOVED_FROM_STAGE, this.onExit, this);
+    }
+
+    public touchDown(e : egret.TouchEvent){
+        //var e : egret.TouchEvent;
+        Level5.instance._distance.x = e.stageX - Level5.instance._comb.x;
+        Level5.instance._distance.y = e.stageY - Level5.instance._comb.y;
+        Level5.instance._touchStatus = true;
+        Level5.instance.stage.addEventListener(egret.TouchEvent.TOUCH_MOVE, Level5.instance.touchMove, this);
+    }
+
+    public touchMove(e : egret.TouchEvent){
+        if(Level5.instance._touchStatus){
+            Level5.instance._comb.x = e.stageX - Level5.instance._distance.x;
+            Level5.instance._comb.y = e.stageY - Level5.instance._distance.y;
+        }
+    }
+
+    private touchUp(){
+        //console.log("touch leave!")
+        Level5.instance._touchStatus = false;
+        this.stage.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.touchMove, this);
+    }
+
+    public turnNext(e : egret.TouchEvent){
+        
+
+    }
+
+
+
+    protected onEnter() {
+        this._comb = UI.addPic(this, "lvl5_comb_png", 50, 355, true);
+		this._comb.scaleX = 0.4;
+		this._comb.scaleY = 0.4;
+        this._comb.x = this.stage.stageWidth / 3.5;
+        this._comb.y = this.stage.stageHeight * 2 / 5;
+        this._comb.touchEnabled = true;
+        this._comb.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.touchDown, this);
+        this._comb.addEventListener(egret.TouchEvent.TOUCH_END, this.touchUp, this);
+
+        this._buttonNext = UI.addPic(this, "buttonNext_png", 350, UI.WINSIZE_H/4*3, true);
+        this._buttonNext.scaleX = 0.4;
+		this._buttonNext.scaleY = 0.4;
+        this._buttonPrev = UI.addPic(this, "buttonPrev_png", 130, UI.WINSIZE_H/4*3, true);
+        this._buttonPrev.scaleX = 0.4;
+		this._buttonPrev.scaleY = 0.4;
+
+
+    }
+
+    protected onExit() {
+        //必须要加入
+
+    }
+
+}

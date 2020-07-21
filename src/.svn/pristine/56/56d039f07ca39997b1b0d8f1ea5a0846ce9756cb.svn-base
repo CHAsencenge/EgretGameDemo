@@ -1,0 +1,131 @@
+
+class Level11 extends egret.DisplayObjectContainer implements egret.DisplayObject {
+	public static instance: Level11;
+	public _pic: egret.Bitmap;
+	public _pic2: egret.Bitmap;
+	public _img: Array<egret.Bitmap> = [];
+	public _txt: egret.TextField;
+	public _btn: egret.Bitmap;
+	public _secondFlag: number = 0;
+	public _lag: boolean = false
+	private _tag: number = 0
+	//
+
+
+	public constructor() {
+		super();
+		Level11.instance = this;
+		// 监听组件创建完毕 也就是场景的外观创建完毕
+		this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onEnter, this);
+		this.addEventListener(egret.Event.REMOVED_FROM_STAGE, this.onExit, this);
+	}
+
+
+
+	protected onEnter() {
+		//-----------------------------------------------------------------------------------------------图片处理
+		enum imgName {
+			"cloud_lev003_1" = 0, "cloud_lev003_2", "cloud2_lev003_1", "cloud2_lev003_2",
+			"sun_lev003", "flower-pot_lev003", "flower_lev003"
+		}
+
+		this._img[imgName["sun_lev003"]] = UI.addPic(this, "sun_lev003_png", 245, UI.WINSIZE_H / 2 - 107 / 820 * UI.WINSIZE_H, true);
+		this._img[imgName["sun_lev003"]].scaleX = 0.48
+		this._img[imgName["sun_lev003"]].scaleY = 0.48
+
+		this._img[imgName["flower-pot_lev003"]] = UI.addPic(this, "flower-pot_lev003_png", 245, 245 / 820 * UI.WINSIZE_H + UI.WINSIZE_H / 2, true);
+		this._img[imgName["flower-pot_lev003"]].scaleX = 0.52
+		this._img[imgName["flower-pot_lev003"]].scaleY = 0.52
+
+		this._img[imgName["cloud_lev003_1"]] = UI.addPic(this, "cloud_lev003_png", 335, UI.WINSIZE_H / 2 - 156 / 820 * UI.WINSIZE_H, true);
+		this._img[imgName["cloud_lev003_1"]].scaleX = 0.45
+		this._img[imgName["cloud_lev003_1"]].scaleY = 0.45
+
+		this._img[imgName["cloud_lev003_2"]] = UI.addPic(this, "cloud_lev003_png", 161, UI.WINSIZE_H / 2 - 176 / 820 * UI.WINSIZE_H, true);
+		this._img[imgName["cloud_lev003_2"]].scaleX = 0.4
+		this._img[imgName["cloud_lev003_2"]].scaleY = 0.4
+
+		this._img[imgName["cloud2_lev003_1"]] = UI.addPic(this, "cloud2_lev003_png", 317, UI.WINSIZE_H / 2 - 52 / 820 * UI.WINSIZE_H, true);
+		this._img[imgName["cloud2_lev003_1"]].scaleX = 0.54
+		this._img[imgName["cloud2_lev003_1"]].scaleY = 0.54
+
+		this._img[imgName["cloud2_lev003_2"]] = UI.addPic(this, "cloud2_lev003_png", 139, UI.WINSIZE_H / 2 - 88 / 820 * UI.WINSIZE_H, true);
+		this._img[imgName["cloud2_lev003_2"]].scaleX = 0.47
+		this._img[imgName["cloud2_lev003_2"]].scaleY = 0.47
+
+
+		//---------------------------------------------------------------------------------------------碰撞点选取
+
+		// let shape1:egret.Shape = new egret.Shape();
+		// shape1.graphics.beginFill(0x336699)
+		// shape1.graphics.drawRect(213, 232/820*UI.WINSIZE_H,5,5)
+		// shape1.graphics.endFill()
+		// this.addChild(shape1)
+
+
+		//----------------------------------------------------------------------------------------移动云彩以及检测
+		for (let i = 0; i < 4; i++) {
+			this._img[i].addEventListener(egret.TouchEvent.TOUCH_BEGIN, function (e: egret.TouchEvent) {
+				this.setChildIndex(this._img[i], 1000)
+			}, this);
+
+			this._img[i].addEventListener(egret.TouchEvent.TOUCH_MOVE, function (e: egret.TouchEvent) {
+				this._img[i].x = e.stageX;
+				this._img[i].y = e.stageY;
+				this.iscrash();
+			}, this);
+
+			this._img[i].$setTouchEnabled(true);
+		}
+
+	}
+
+
+	private testHit(b: egret.Bitmap): boolean {//相交，则为 false；否则为 true。 
+		return !b.hitTestPoint(213, 232 / 820 * UI.WINSIZE_H, true)
+			&& !b.hitTestPoint(179, 266 / 820 * UI.WINSIZE_H, true)
+			&& !b.hitTestPoint(168, 310 / 820 * UI.WINSIZE_H, true)
+			&& !b.hitTestPoint(184, 358 / 820 * UI.WINSIZE_H, true)
+			&& !b.hitTestPoint(223, 384 / 820 * UI.WINSIZE_H, true)
+			&& !b.hitTestPoint(277, 382 / 820 * UI.WINSIZE_H, true)
+			&& !b.hitTestPoint(311, 348 / 820 * UI.WINSIZE_H, true)
+			&& !b.hitTestPoint(324, 298 / 820 * UI.WINSIZE_H, true)
+			&& !b.hitTestPoint(305, 252 / 820 * UI.WINSIZE_H, true)
+			&& !b.hitTestPoint(265, 234 / 820 * UI.WINSIZE_H, true);
+
+	}
+
+	private iscrash(): void {
+		if (this.testHit(this._img[0]) == true && this.testHit(this._img[1]) == true
+			&& this.testHit(this._img[2]) == true && this.testHit(this._img[3]) == true) {		//未碰撞
+			this._pic = UI.addPic(this, "flower_lev003_png", 256, UI.WINSIZE_H / 2 + 154, true);
+			this._pic.scaleX = 0.6;
+			this._pic.scaleY = 0.6;
+			this._ok();
+		}
+	}
+
+	protected _ok(): void {
+		this._pic = UI.addPic(this, "ok_png", UI.WINSIZE_W / 2, UI.WINSIZE_H / 2, true);
+		this._pic.scaleX = 0; this._pic.scaleY = 0;
+		this._pic2 = UI.addPic(this, "check2_png", UI.WINSIZE_W / 2, UI.WINSIZE_H / 2, true);
+		this._pic2.scaleX = 0; this._pic2.scaleY = 0;
+		egret.Tween.get(this._pic).to({ scaleX: 0.4, scaleY: 0.4 }, 1000, egret.Ease.sineIn);
+		egret.Tween.get(this._pic2).to({ scaleX: 1, scaleY: 1 }, 1000, egret.Ease.sineIn);
+	}
+
+
+	protected onExit() {
+		//必须要加入
+	}
+
+
+}
+
+
+
+
+
+
+
+

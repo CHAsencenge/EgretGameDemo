@@ -1,0 +1,121 @@
+
+class Level11 extends egret.DisplayObjectContainer implements egret.DisplayObject{
+	public static instance: Level11;
+	public _pic : egret.Bitmap;
+	public _pic2 : egret.Bitmap;
+	public _img : Array<egret.Bitmap> =[];
+	public _txt : egret.TextField;
+	public _btn : egret.Bitmap;
+	public _secondFlag : number =0;
+	public _lag : boolean = false
+	//
+
+
+	public constructor() {
+		super();
+		Level11.instance = this;
+		// 监听组件创建完毕 也就是场景的外观创建完毕
+		this.addEventListener(egret.Event.ADDED_TO_STAGE,this.onEnter,this);
+		this.addEventListener(egret.Event.REMOVED_FROM_STAGE,this.onExit,this);
+	}
+
+
+	//碰撞检测
+	public static testHit(b1:egret.Bitmap, b2:egret.Bitmap):boolean {
+                var b1Rect:egret.Rectangle = b1.getBounds();
+                var b2Rect:egret.Rectangle = b2.getBounds();
+                b1Rect.x = b1.x; b1Rect.y = b1.y;
+				b1Rect.width = b1.width*b1.scaleX; b1Rect.height = b1.height*b1.scaleY;
+                b2Rect.x = b2.x; b2Rect.y = b2.y;
+				b2Rect.width = b2.width*b2.scaleX; b2Rect.height = b2.height*b2.scaleY;
+				console.log(b1Rect.intersects(b2Rect))
+                return b1Rect.intersects(b2Rect);
+	}
+
+	public static iscrash() {
+		enum imgName{
+			"cloud_lev003_1"=0,"cloud_lev003_2","cloud2_lev003_1","cloud2_lev003_2",
+			"sun_lev003","flower-pot_lev003","flower_lev003"}
+		if(Level11.testHit(Level11.instance._img[imgName["cloud_lev003_1"]],Level11.instance._img[imgName["sun_lev003"]])==false
+			&&Level11.testHit(Level11.instance._img[imgName["cloud_lev003_2"]],Level11.instance._img[imgName["sun_lev003"]])==false
+			&&Level11.testHit(Level11.instance._img[imgName["cloud2_lev003_1"]],Level11.instance._img[imgName["sun_lev003"]])==false
+			&&Level11.testHit(Level11.instance._img[imgName["cloud2_lev003_2"]],Level11.instance._img[imgName["sun_lev003"]])==false){
+			Level11.instance._pic = UI.addPic(Level11.instance, "flower_lev003_png", 256, UI.WINSIZE_H/2+154, true);
+			Level11.instance._pic.scaleX=0.61;
+			Level11.instance._pic.scaleY=0.61;
+			Level11.instance._pic = UI.addPic(Level11.instance, "ok_png", UI.WINSIZE_W / 2, UI.WINSIZE_H / 2, true);
+			Level11.instance._pic.scaleX=0;
+			Level11.instance._pic.scaleY=0;
+			
+			Level11.instance._pic2 = UI.addPic(Level11.instance, "check2_png", UI.WINSIZE_W / 2, UI.WINSIZE_H / 2, true);
+			Level11.instance._pic2.scaleX=0;
+			Level11.instance._pic2.scaleY=0;
+			let  tw = egret.Tween.get(Level11.instance._pic);
+			tw.to({ scaleX: 0.45, scaleY: 0.45}, 700,egret.Ease.sineIn);
+			let  tw2 = egret.Tween.get(Level11.instance._pic2);
+			tw2.to({ scaleX: 1, scaleY: 1}, 700,egret.Ease.sineIn);
+			}
+
+	}
+
+
+	protected onEnter() {
+		//-----------------------------------------------------------------------------------------------图片处理
+		enum imgName{
+			"cloud_lev003_1"=0,"cloud_lev003_2","cloud2_lev003_1","cloud2_lev003_2",
+			"sun_lev003","flower-pot_lev003","flower_lev003"}
+
+		
+		this._img[imgName["sun_lev003"]] = UI.addPic(this, "sun_lev003_png", 245, UI.WINSIZE_H/2-107, true);
+		this._img[imgName["sun_lev003"]].scaleX=0.48
+		this._img[imgName["sun_lev003"]].scaleY=0.48
+
+		this._img[imgName["flower-pot_lev003"]] = UI.addPic(this, "flower-pot_lev003_png", 245, 245+UI.WINSIZE_H/2, true);
+		this._img[imgName["flower-pot_lev003"]].scaleX=0.52
+		this._img[imgName["flower-pot_lev003"]].scaleY=0.52
+
+		this._img[imgName["cloud_lev003_1"]] = UI.addPic(this, "cloud_lev003_png", 335, UI.WINSIZE_H/2-156, true);
+		this._img[imgName["cloud_lev003_1"]].scaleX=0.45
+		this._img[imgName["cloud_lev003_1"]].scaleY=0.45
+
+		this._img[imgName["cloud_lev003_2"]] = UI.addPic(this, "cloud_lev003_png", 161, UI.WINSIZE_H/2-176, true);
+		this._img[imgName["cloud_lev003_2"]].scaleX=0.4
+		this._img[imgName["cloud_lev003_2"]].scaleY=0.4
+
+		this._img[imgName["cloud2_lev003_1"]] = UI.addPic(this, "cloud2_lev003_png", 317, UI.WINSIZE_H/2-52, true);
+		this._img[imgName["cloud2_lev003_1"]].scaleX=0.54
+		this._img[imgName["cloud2_lev003_1"]].scaleY=0.54
+
+		this._img[imgName["cloud2_lev003_2"]] = UI.addPic(this, "cloud2_lev003_png", 139, UI.WINSIZE_H/2-88, true);
+		this._img[imgName["cloud2_lev003_2"]].scaleX=0.47
+		this._img[imgName["cloud2_lev003_2"]].scaleY=0.47
+
+
+		//监听事件
+		for(let i=0;i<4;i++){
+			Level11.instance._img[i].addEventListener(egret.TouchEvent.TOUCH_BEGIN, function (e: egret.TouchEvent) {
+				}, this);
+			Level11.instance._img[i].addEventListener(egret.TouchEvent.TOUCH_MOVE, function (e: egret.TouchEvent) {
+				Level11.instance._img[i].x = e.stageX;
+				Level11.instance._img[i].y =  e.stageY;
+				Level11.iscrash();
+			}, this);
+			this._img[i].$setTouchEnabled(true);
+		}
+	
+	}
+	
+	protected onExit() {
+		//必须要加入
+	}
+
+
+}
+
+
+
+
+	
+
+
+

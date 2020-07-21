@@ -1,0 +1,37 @@
+{
+  "engineVersion": "5.2.28",
+  "compilerVersion": "5.2.28",
+  "template": {},
+  "target": {
+    "current": "web"
+  },
+  "modules": [
+    {
+      "name": "egret"
+    },
+    {
+      "name": "game"
+    },
+    {
+      "name": "tween"
+    },
+    {
+      "name": "assetsmanager"
+    },
+    {
+      "name": "eui"
+    },
+    {
+      "name": "socket"
+    },
+    {
+      "name": "promise"
+    }
+  ],
+  "targets": {
+    "android": {
+      "appname": "黄金矿工经典版",
+      "packagename": "com.mobi.miner.vivo"
+    }
+  }
+}
